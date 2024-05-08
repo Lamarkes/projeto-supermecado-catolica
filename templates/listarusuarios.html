@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Supermercado Católica</title>
+    <link rel="stylesheet" type="text/css" href="../static/style2.css">
+</head>
+<body>
+
+ <h1 class="text">
+        <a href="/home">
+    <img class="arrow" src="static/images/arrow_return.png" alt="" />
+    </a>USUÁRIOS CADASTRADOS</h1>
+
+    {% for  id,nome,email,senha, perfil  in usuarios %}
+        <h1>{{ email }}</h1>
+        <p>nome: {{ nome }}</p>
+        <p>senha: {{ senha }}</p>
+        <p>perfil: {{ perfil }}</p>
+    <hr>
+    {% endfor %}
+
+
+</body>
+</html>

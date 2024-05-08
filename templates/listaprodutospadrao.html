@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Produtos Supermercado Católica</title>
+    <link rel="stylesheet" type="text/css" href="../static/style2.css">
+</head>
+<body>
+    <h1 class="text">
+        <a href="/home">
+            <img class="arrow" src="static/images/arrow_return.png" alt="" />
+        </a>
+        PRODUTOS DISPONÍVEIS
+    </h1>
+
+    {% for nomeproduto, marca, validade, preco, quantidade_disponivel, foto in produtos %}
+        <p>
+            <img src="{{ foto }}" alt="{{ nomeproduto }}" width="130" height="130">
+            <h1>{{ nomeproduto }}</h1>
+            <p>Marca: {{ marca }}</p>
+            <p>Validade: {{ validade }}</p>
+            <p>Preço: R$ {{ preco }}</p>
+            <p>Quantidade Disponível: {{ quantidade_disponivel }}</p>
+            <br>
+            <hr>
+
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,8 @@
+create table usuarios(
+	id SERIAL PRIMARY KEY,
+	nome VARCHAR(30),
+	email VARCHAR(30),
+	senha VARCHAR(30),
+	perfil VARCHAR(20)
+
+);

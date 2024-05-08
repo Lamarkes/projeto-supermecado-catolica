@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Supermercado Católica</title>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+
+<body>
+
+  <section class="boxLogin container">
+    <div class="content">
+
+      <form action="/modificar_produto" class="login" method="post" name="login" enctype="multipart/form-data">
+        <h1>Modificar produto</h1>
+        <div class="padding">
+          <label>
+            <input type="text" class="campos" required placeholder="Novo nome" name="nomeproduto">
+          </label>
+          <label>
+            <input type="text" class="campos" required placeholder="Marca"  name="marca">
+          </label>
+          <label>
+            <input type="date" class="campos" required placeholder="validade"  name="validade">
+          </label>
+          <label>
+            <input type="text" class="campos" required placeholder="Novo preço"  name="preco">
+          </label>
+          <label>
+            <input type="text" class="campos" required placeholder="Quantidade Disponivel"  name="quantidade_disponivel">
+          </label>
+
+          <input type="file" class="btn fade_8S" required value="Arquivo" name="file">
+
+            <label>
+              <input type="submit" class="btn fade_8S" value="Modificar produto" name="login">
+          </label>
+        </div>
+      </form>
+ </div>
+ </section>
+</body>
+</html>

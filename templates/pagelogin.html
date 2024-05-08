@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Entre em nosso site!</title>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+
+<body>
+<a href="/">
+    <img src="static/images/arrow_return.png" alt="" />
+</a>
+
+  <section class="boxLogin container">
+    <div class="content">
+      <form action="/login" class="login" method="post" name="login" enctype="multipart/form-data">
+
+        <h1>Login</h1>
+        <div class="padding">
+          <label>
+            <input type="text" class="campos" required placeholder="E-mail" name="email">
+          </label>
+          <label>
+            <input type="password" class="campos" required placeholder="Senha"  name="senha">
+          </label>
+          <input type="submit" class="btn fade_8S" value="Entrar">
+            <label>
+                <a href="/cadastrarusuario">
+                <button type="button" class="btn fade_8S">Cadastrar Usuario</button>
+            </a>
+            </label>
+        </div>
+      </form>
+ </div>
+ </section>
+</body>
+</html>

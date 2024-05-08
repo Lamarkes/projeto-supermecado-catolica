@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Supermercado Católica</title>
+    <link rel="stylesheet" type="text/css" href="../static/style.css">
+</head>
+
+<body>
+<a href="/home">
+    <img src="static/images/arrow_return.png" alt="" />
+</a>
+
+  <section class="boxLogin container">
+    <div class="content">
+
+      <form action="/cadastrarprodutos" class="login" method="post" name="login" enctype="multipart/form-data">
+        <h1>Cadastrar produtos</h1>
+        <div class="padding">
+          <label>
+            <input type="text" class="campos" required placeholder="Nome do produto" name="nomeproduto">
+          </label>
+          <label>
+            <input type="text" class="campos" required placeholder="Marca do Produto"  name="marca">
+          </label>
+          <label>
+            <input type="date" class="campos" required placeholder="validade"  name="validade">
+          </label>
+          <label>
+            <input type="text" class="campos" required placeholder="Preço"  name="preco">
+          </label>
+          <label>
+            <input type="text" class="campos" required placeholder="Quantidade Disponivel"  name="quantidade_disponivel">
+          </label>
+
+          <input type="file" class="btn fade_8S" required value="Arquivo" name="file">
+
+            <label>
+              <input type="submit" class="btn fade_8S" value="Cadastrar" name="login">
+          </label>
+        </div>
+      </form>
+ </div>
+ </section>
+</body>
+</html>

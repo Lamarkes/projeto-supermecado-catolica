@@ -1,0 +1,9 @@
+create table produto(
+	id SERIAL PRIMARY KEY,
+	nomeproduto VARCHAR(30),
+	marca VARCHAR(30),
+	validade DATE,
+	preco NUMERIC(10,2),
+	quantidade_disponivel INTEGER,
+	foto TEXT
+);
