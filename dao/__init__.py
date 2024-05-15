@@ -1,3 +1,5 @@
+from datetime import datetime, timedelta
+
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
@@ -59,6 +61,7 @@ def listarusuarios(number):
     conexao.close()
 
     return recset
+
 def buscarprodutopelonome(nome):
     conexao = conectardb()
     cur = conexao.cursor()
@@ -124,6 +127,80 @@ def cadastrarproduto(nomeproduto,marca,validade, preco, quantidade_disponivel, f
     try:
         sql = f"INSERT INTO produto (nomeproduto,marca,validade, preco, quantidade_disponivel, foto) VALUES (%s, %s, %s, %s, %s, %s)"
         cur.execute(sql, (nomeproduto,marca,validade, preco, quantidade_disponivel, foto))
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+        exito = False
+    else:
+        conexao.commit()
+        exito = True
+
+    conexao.close()
+    return exito
+
+# ---------------------------------------
+
+def buscar_usuario(nome):
+    conexao = conectardb()
+    cur = conexao.cursor()
+    cur.execute(f"SELECT nome,email, perfil FROM usuarios WHERE nome = '{nome}'")
+    recset = cur.fetchall()
+    conexao.close()
+    return recset
+
+def deletar_usuario(nome):
+    conexao = conectardb()
+    cur = conexao.cursor()
+    exito = False
+    try:
+        cur.execute(f"DELETE FROM usuarios WHERE nome = '{nome}'")
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+        exito = False
+    else:
+        conexao.commit()
+        exito = True
+
+    conexao.close()
+    return exito
+
+def processar_pedido(nomeproduto):
+    conexao = conectardb()
+    cur = conexao.cursor()
+    exito = False
+    try:
+        cur.execute(f"UPDATE produto SET quantidade_disponivel = quantidade_disponivel - 1 WHERE nomeproduto = '{nomeproduto}'")
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+        exito = False
+    else:
+        conexao.commit()
+        exito = True
+
+    conexao.close()
+    return exito
+
+def pedidos_ultima_semana(number):
+    conexao = conectardb()
+    if number == 0:
+        cur = conexao.cursor()
+    else:
+        cur = conexao.cursor(cursor_factory=RealDictCursor)
+    hoje = datetime.today().date()
+    semana_passada = hoje - timedelta(days=7)
+    cur.execute(f"SELECT nomeproduto,marca,validade, preco, quantidade_disponivel, foto FROM produto  WHERE validade BETWEEN '{semana_passada}' AND '{hoje}' ORDER BY validade ASC")
+    recset = cur.fetchall()
+    conexao.close()
+
+    return recset
+
+
+def processar_pedido_externo(nomeproduto):
+    conexao = conectardb()
+    cur = conexao.cursor()
+    exito = False
+    try:
+        cur.execute(
+            f"UPDATE produto SET quantidade_disponivel = quantidade_disponivel - 1 WHERE nomeproduto = '{nomeproduto}'")
     except psycopg2.IntegrityError:
         conexao.rollback()
         exito = False

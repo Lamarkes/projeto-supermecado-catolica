@@ -65,7 +65,6 @@ def verificarlogin():
 
 @app.route('/logout')
 def logout():
-
     session.pop('email', None)
 
     res = make_response("Cookie Removido")
@@ -136,12 +135,6 @@ def listar_produtos_teste():
         return resp
 
 
-@app.route('/listarprodutos/testeSemlogin', methods=['GET'])
-def listar_pessoas_ext_semlogin():
-    result = dao.listarprodutos(1)
-    return jsonify(result).json
-
-
 @app.route('/deletar_produto', methods=['POST'])
 def deletar_produto():
     if request.method == 'POST':
@@ -174,6 +167,7 @@ def modificarproduto():
         validade = request.form.get('validade')
         preco = request.form.get('preco')
         quantidade_disponivel = request.form.get('quantidade_disponivel')
+        print(quantidade_disponivel)
         f = request.files['file']
         path = app.config['UPLOAD_FOLDER'] + f.filename
         print(path)
@@ -209,8 +203,6 @@ def modificarsuarios():
             return render_template('pageadm.html')
 
 
-
-
 @app.route('/listarusuarios', methods=['GET'])
 def listar_usuarios_cadastrados():
     if request.method == 'GET':
@@ -220,8 +212,6 @@ def listar_usuarios_cadastrados():
                 return render_template('listarusuarios.html', usuarios=retorno, email=session.get('email'))
             else:
                 return 'apenas adms podem visualizar os usuarios'
-
-
 
 
 @app.route('/home')
@@ -234,6 +224,71 @@ def home_page():
 
     else:
         return 'Precisa estar logado para entrar nesta seção!'
+
+
+# ----------------
+
+@app.route('/buscar_clientes', methods=['GET'])
+def buscar_clientes():
+    if request.method == 'GET':
+        if session.get('email') != None:
+            nome = request.args.get('nome')
+            retorno = dao.buscar_usuario(nome)
+            if '.adm' in session.get('email'):
+                return render_template('buscarclientepornome.html', usuarios=retorno, email=session.get('email'))
+        else:
+            return 'Precisa estar logado para entrar nesta seção!'
+
+@app.route('/remover_cliente', methods=['POST'])
+def deletar_usuario():
+    if request.method == 'POST':
+        if session.get('email') != None:
+            if '.adm' in session.get('email'):
+                nome = request.form.get('nome')
+                if dao.deletar_usuario(nome):
+                    return render_template('pageadm.html')
+                else:
+                    return 'Usuario nao encontrado'
+            else:
+                return 'Apenas adms podem deletar produtos'
+        else:
+            return 'Algo deu errado!'
+
+
+@app.route('/processar_pedido', methods=['POST'])
+def processar_pedido():
+    if request.method == 'POST':
+        if session.get('email') != None:
+            nomeproduto = request.form.get('nomeproduto')
+            if dao.processar_pedido(nomeproduto):
+                return render_template('mensagemdecompra.html')
+            else:
+                return 'Produto nao encontrado'
+    else:
+        return 'Algo deu errado'
+
+@app.route('/pedidos_ultima_semana/externo', methods=['GET'])
+def pedidos_ultima_semana():
+    if request.method == 'GET':
+        if session.get('email') != None:
+            result = dao.pedidos_ultima_semana(1)
+            return jsonify(result).json
+        else:
+            resp = make_response('necessário fazer login')
+            resp.status_code = 511
+            return resp
+
+
+@app.route("/processar_pedido_externo", methods=['GET'])
+def processar_pedido_externo():
+    if session.get('email') != None:
+        nome = request.values.get('nomeproduto')
+        dao.processar_pedido_externo(nome)
+        return 'O produto foi comprado com sucesso!'
+    else:
+        resp = make_response('necessário fazer login')
+        resp.status_code = 511
+        return resp
 
 
 if __name__ == '__main__':

@@ -17,6 +17,13 @@
         <p>nome: {{ nome }}</p>
         <p>senha: {{ senha }}</p>
         <p>perfil: {{ perfil }}</p>
+ <form action="/remover_cliente" method="POST" style="display:inline;">
+    <input type="hidden" name="nome" value="{{ nome }}">
+    <button type="submit" onclick="return confirm('Tem certeza de que deseja deletar este usuario?');">
+                    <img class="lix" src="static/images/delete.png" alt="Lixeira" width="30" height="30">
+                </button>
+</form>
+
     <hr>
     {% endfor %}
 

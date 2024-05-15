@@ -1,0 +1,26 @@
+<!-- templates/buscar_clientes.html -->
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Clientes</title>
+    <link rel="stylesheet" type="text/css" href="../static/style2.css">
+</head>
+<body>
+<h1 class="text">
+        <a href="/home">
+            <img class="arrow" src="static/images/arrow_return.png" alt="" />
+        </a>
+    Buscar Clientes
+    </h1>
+    <form action="/buscar_clientes" method="GET">
+        <label>
+            <input type="text" name="nome" placeholder="Nome do cliente"/>
+        </label>
+        <button type="submit">Buscar</button>
+    </form>
+    <hr>
+<p>{{usuarios}}</p>
+
+</body>
+</html>

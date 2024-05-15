@@ -22,6 +22,12 @@
             <p>Preço: R$ {{ preco }}</p>
             <p>Quantidade Disponível: {{ quantidade_disponivel }}</p>
             <br>
+    <form action="/processar_pedido" method="POST" style="display:inline;">
+    <input type="hidden" name="nomeproduto" value="{{ nomeproduto }}">
+    <button type="submit" onclick="return confirm('Tem certeza de que deseja comprar este produto?');">
+        <img class="lix" src="static/images/shopping_cart.png" alt="Lixeira" width="30" height="30">
+    </button>
+</form>
             <hr>
 
     {% endfor %}
