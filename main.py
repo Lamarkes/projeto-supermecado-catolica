@@ -3,7 +3,7 @@ import re
 
 from flask import *
 import dao
-from os.path import join, dirname, realpath
+import dataanalise
 
 app = Flask(__name__)
 app.secret_key = 'ASsadlkjasdAJS54$5sdSA21'
@@ -12,13 +12,28 @@ app.secret_key = 'ASsadlkjasdAJS54$5sdSA21'
 # app.config['UPLOAD_FOLDER'] = join(dirname(realpath(__file__)), 'static/images/')
 app.config['UPLOAD_FOLDER'] = 'static/images/'
 
-
-# testar end-points com java
-
-
 @app.route('/')
 def index():
     return render_template('index.html')
+
+
+
+@app.route('/listarcompras', methods=['GET'])
+def listar_compras():
+
+    retorno = dao.listarcompra(0)
+    return render_template('listacompra.html', compras=retorno)
+
+
+@app.route('/visualizar_grafico', methods=['GET'])
+def visualizar_grafico():
+        if session.get('email') != None:
+            nome_produto = request.values.get('nome_produto')
+            rows = dao.agregar_compras(nome_produto)
+            img = dataanalise.retorna_dataFrame(rows)
+            return render_template('teste.html', fig=img)
+        else:
+            return 'apenas adms podem realizar o cadastro de produtos'
 
 
 @app.route('/cadastrarusuario', methods=['GET', 'POST'])
@@ -141,7 +156,6 @@ def deletar_produto():
         if session.get('email') != None:
             if '.adm' in session.get('email'):
                 nomeproduto = request.form.get('nomeproduto')
-                print(nomeproduto)
                 dao.deletar_produto(nomeproduto)
                 return render_template('listaprodutosadm.html')
             else:

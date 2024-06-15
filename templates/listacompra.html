@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Compras</title>
+  <link rel="stylesheet" type="text/css" href="../static/style2.css">
+</head>
+<body>
+    <h1 class="text">
+        <a href="/home">
+            <img class="arrow" src="static/images/arrow_return.png" alt="" />
+        </a>
+        COMPRAS
+    </h1>
+
+  {% for data_compra,cod_produto,nome_produto, valor_compra in compras %}
+
+
+    <h1>{{ nome_produto }}</h1>
+    <p>Data da compra: {{ data_compra }}</p>
+    <p>Codigo do produto: {{ cod_produto }}</p>
+    <p>Valor da compra: R$ {{ valor_compra }}</p>
+
+    <form action="/visualizar_grafico" method="get">
+                <input type="hidden" name="nome_produto" value="{{ nome_produto }}">
+                <button type="submit">
+                    <img class="lix" src="static/images/analytics.png" alt="Lixeira" width="30" height="30">
+                </button>
+    </form>
+    <hr>
+    {% endfor %}
+</body>
+</html>

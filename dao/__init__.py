@@ -3,12 +3,9 @@ from datetime import datetime, timedelta
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+
 def conectardb():
     con = psycopg2.connect(
-        #host='dpg-cog57pev3ddc73e6e3vg-a.oregon-postgres.render.com',
-        #database='encontraramigos',
-        #user='encontraramigos_user',
-        #password='x2bd2iia6a62XKFE5gSGtIiY0is2oBCB'
         host='localhost',
         database='mercadocatolica',
         user='postgres',
@@ -32,6 +29,56 @@ def cadastrarusuario(nome, email, senha, perfil):
 
     conexao.close()
     return exito
+
+
+def inserir_compra(id,data_compra, cod_produto, nome_produto, valor_compra):
+    conexao = conectardb()
+    cur = conexao.cursor()
+    exito = False
+    try:
+        sql = f"INSERT INTO compras (id, data_compra, cod_produto, nome_produto, valor_compra) VALUES ('{id}','{data_compra}', '{cod_produto}', '{nome_produto}', '{valor_compra}' )"
+        cur.execute(sql)
+    except psycopg2.IntegrityError:
+        conexao.rollback()
+        exito = False
+    else:
+        conexao.commit()
+        exito = True
+
+    conexao.close()
+    return exito
+
+
+
+def agregar_compras(nome_produto):
+    conexao = conectardb()
+    cur = conexao.cursor()
+
+    sql = f"""
+                SELECT
+                    EXTRACT('month' from data_compra::TIMESTAMP) as mes,
+                    SUM(valor_compra::numeric) as total_vendas
+                FROM compras
+                where nome_produto = '{nome_produto}'
+                GROUP BY mes
+                ORDER BY mes
+            """
+    cur.execute(sql)
+    rows = cur.fetchall()
+    conexao.close()
+    return rows
+
+def listarcompra(number):
+    conexao = conectardb()
+    if number == 0:
+        cur = conexao.cursor()
+    else:
+        cur = conexao.cursor(cursor_factory=RealDictCursor)
+    cur.execute(f"SELECT data_compra,cod_produto,nome_produto, valor_compra FROM compras")
+    recset = cur.fetchall()
+    conexao.close()
+
+    return recset
 
 def verificarlogin(email, senha):
     conexao = conectardb()
@@ -186,8 +233,8 @@ def pedidos_ultima_semana(number):
     else:
         cur = conexao.cursor(cursor_factory=RealDictCursor)
     hoje = datetime.today().date()
-    semana_passada = hoje - timedelta(days=7)
-    cur.execute(f"SELECT nomeproduto,marca,validade, preco, quantidade_disponivel, foto FROM produto  WHERE validade BETWEEN '{semana_passada}' AND '{hoje}' ORDER BY validade ASC")
+    proxima_semana = hoje + timedelta(days=7)
+    cur.execute(f"SELECT nomeproduto,marca,validade, preco, quantidade_disponivel FROM produto  WHERE validade BETWEEN '{hoje}' AND '{proxima_semana}' ORDER BY validade ASC")
     recset = cur.fetchall()
     conexao.close()
 
